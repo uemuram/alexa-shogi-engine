@@ -14,69 +14,40 @@ function log(msg) {
 }
 
 
-// ロジック類
-function createStdin() {
-    //     return `usi
-    // isready
-    // usinewgame
-    // `
-    return `usi isready
-usinewgame
-`
-}
+let counter = 0;
 
 function getResult(stdout) {
-    // let infoList = []
-    // const generateResult = bestmove => ({
-    //     bestmove,
-    //     bestpv: selectBestPv(infoList),
-    //     info_list: infoList
-    // })
-
     return new Promise(resolve => {
-        // stdout.pipe(split()).on('data', data => {
         stdout.on('data', data => {
-            const line = data.toString();
-            const [cmd, ...words] = line.split(" ");
-            log(`[cmd: ${cmd}]`);
-            log(`[line: ${line}]`);
-            // local_log(words);
-            // if(cmd == "readyok") resolve("xyz2");
-            resolve("xyz2");
-            // if (cmd == "info") infoList.push(parseInfo(words))
-            // if (cmd == "bestmove") resolve(generateResult(words[0]))
+            counter ++;
+            log(counter);
+            // log(data.toString());
+            resolve(`success(${counter})`);
         })
     })
 }
 
 exports.handler = async(event) => {
-
-    log('engine start');
-
-    log("a");
-
     const proc = cp.spawn('./apery', [], { cwd: '/usr/local/apery/bin/' })
     let result;
 
-    log("b");
-
-    log(JSON.stringify(proc.stdout));
+    log("start");
 
     proc.stdin.write('usi\n');
     result = await getResult(proc.stdout);
-
-    log("c");
+    log(result);
 
     proc.stdin.write('isready\n');
     result = await getResult(proc.stdout);
+    log(result);
 
-    log("d");
+    proc.stdin.write('isready\n');
+    result = await getResult(proc.stdout);
+    log(result);
 
-    // proc.stdin.write('isready\n');
-    // result = await getResult(proc.stdout);
-
-    // log("e");
-
+    proc.stdin.write('isready\n');
+    result = await getResult(proc.stdout);
+    log(result);
 
     proc.kill();
 
