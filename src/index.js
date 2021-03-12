@@ -9,8 +9,8 @@ function local_log(msg) {
 }
 
 function log(msg) {
-    local_log(msg);
-    cp.execSync(`echo "${msg}" >> /tmp/log.txt`);
+    // local_log(msg);
+    // cp.execSync(`echo "${msg}" >> /tmp/log.txt`);
     console.log(msg);
 }
 
@@ -34,22 +34,40 @@ function getResult(stdout) {
 }
 
 exports.handler = async(event) => {
-    const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
-    let result;
+
+    // コールドスタート対策
+    if (event.warming) {
+        log('warming...')
+        return {
+            statusCode: 200,
+            body: 'success',
+        };
+    }
 
     log("engine start");
+
+    // 引数から設定取得
     log(`move : ${event.moves}`);
-
-    // ここまでの手順
     const moves = event.moves.join(' ');
+    // 環境変数から設定取得
+    // ハッシュ
+    const usiHash = process.env['USI_HASH'] || 1024;
+    log(`usiHash : ${usiHash}`);
+    // 制限時間
+    const byoyomi = process.env['BYOYOMI'] || 3000;
+    log(`byoyomi : ${byoyomi}`);
 
+    // エンジン呼び出し
+    const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
     proc.stdin.write('setoption name USI_Ponder value false\n');
-    proc.stdin.write('setoption name USI_Hash value 1024\n');
+    proc.stdin.write(`setoption name USI_Hash value ${usiHash}\n`);
     proc.stdin.write('isready\n');
     proc.stdin.write('usinewgame\n');
     proc.stdin.write(`position startpos moves ${moves}\n`);
-    proc.stdin.write('go btime 0 wtime 0 byoyomi 3000\n');
-    result = await getResult(proc.stdout);
+    proc.stdin.write(`go btime 0 wtime 0 byoyomi ${byoyomi}\n`);
+    log("waiting...");
+
+    const result = await getResult(proc.stdout);
     log(`bestmove : ${result}`);
 
     proc.kill();
