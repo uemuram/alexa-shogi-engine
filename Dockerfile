@@ -6,20 +6,15 @@ EXPOSE 8000
 
 WORKDIR /usr/local
 
-RUN yum install git -y && \
-    yum install gcc -y && \
-    yum clean all && \
-    # Rust
-    curl -L https://sh.rustup.rs > /tmp/rustup-init.sh && \
-    chmod u+x /tmp/rustup-init.sh && \
-    /tmp/rustup-init.sh -y && \
-    source ~/.cargo/env && \
+RUN yum install git -y     && \
+    yum install make -y    && \
+    yum install gcc-c++ -y && \
+    yum clean all          && \
     # Apery
-    git clone https://github.com/HiraokaTakuya/apery_rust.git && \
-    cd ./apery_rust/ && \
-    git submodule init && \
-    git submodule update && \
-    cargo build --release
+    git clone https://github.com/HiraokaTakuya/apery.git && \
+    cd /usr/local/apery/src && \
+    make && \
+    cp /usr/local/apery/src/apery /usr/local/apery/bin
 
 # lambda Application
 WORKDIR /usr/local/app

@@ -58,7 +58,8 @@ exports.handler = async(event) => {
     log(`byoyomi : ${byoyomi}`);
 
     // エンジン呼び出し
-    const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
+    // const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
+    const proc = cp.spawn('./apery', [], { cwd: '/usr/local/apery/bin/' })
     proc.stdin.write('setoption name USI_Ponder value false\n');
     proc.stdin.write(`setoption name USI_Hash value ${usiHash}\n`);
     proc.stdin.write('isready\n');
