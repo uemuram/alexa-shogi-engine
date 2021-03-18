@@ -1,5 +1,5 @@
 # AWS Docker Image
-FROM amazon/aws-lambda-nodejs:12
+FROM amazon/aws-lambda-nodejs:14
 
 # Port
 EXPOSE 8000
@@ -11,7 +11,7 @@ RUN yum install git -y     && \
     yum install gcc-c++ -y && \
     yum clean all          && \
     # Apery
-    git clone https://github.com/HiraokaTakuya/apery.git && \
+    git clone https://github.com/HiraokaTakuya/apery.git --recursive && \
     cd /usr/local/apery/src && \
     make && \
     cp /usr/local/apery/src/apery /usr/local/apery/bin
