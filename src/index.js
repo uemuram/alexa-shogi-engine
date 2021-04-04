@@ -59,7 +59,8 @@ exports.handler = async(event) => {
 
     // エンジン呼び出し
     // const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
-    const proc = cp.spawn('./apery', [], { cwd: '/usr/local/apery/bin/' })
+    // const proc = cp.spawn('./apery', [], { cwd: '/usr/local/apery/bin/' })
+    const proc = cp.spawn('./YaneuraOu-by-gcc', [], { cwd: '/usr/local/YaneuraOu-6.0.0/bin/' })
     proc.stdin.write('setoption name USI_Ponder value false\n');
     proc.stdin.write(`setoption name USI_Hash value ${usiHash}\n`);
     proc.stdin.write('isready\n');
