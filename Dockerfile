@@ -15,13 +15,13 @@ RUN yum install git -y     && \
     tar -zxvf v6.0.0.tar.gz && \
     cd /usr/local/YaneuraOu-6.0.0/source &&\
     make clean tournament TARGET_CPU=AVX2 YANEURAOU_EDITION=YANEURAOU_ENGINE_NNUE && \
-    mkdir -p /usr/local/YaneuraOu-6.0.0/bin && \
-    mkdir -p /usr/local/YaneuraOu-6.0.0/bin/eval && \
-    mv /usr/local/YaneuraOu-6.0.0/source/YaneuraOu-by-gcc /usr/local/YaneuraOu-6.0.0/bin
+    mkdir -p /mnt/bin && \
+    mkdir -p /mnt/bin/eval
+#   mv /usr/local/YaneuraOu-6.0.0/source/YaneuraOu-by-gcc /mnt/bin
 
 # eval
-WORKDIR /usr/local/YaneuraOu-6.0.0/bin/eval
-COPY eval/suisyo3kai_20210111/nn.bin .
+# WORKDIR /usr/local/YaneuraOu-6.0.0/bin/eval
+# COPY eval/suisyo3kai_20210111/nn.bin .
 
 # lambda Application
 WORKDIR /usr/local/app

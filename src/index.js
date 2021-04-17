@@ -46,6 +46,11 @@ exports.handler = async(event) => {
 
     log("engine start");
 
+    // フォルダチェック
+    // log(cp.execSync('ls -la /mnt').toString());
+    // log(cp.execSync('ls -la /mnt/bin').toString());
+    // log(cp.execSync('ls -la /mnt/bin/eval').toString());
+
     // 引数から設定取得
     log(`move : ${event.moves}`);
     const moves = event.moves.join(' ');
@@ -58,9 +63,8 @@ exports.handler = async(event) => {
     log(`byoyomi : ${byoyomi}`);
 
     // エンジン呼び出し
-    // const proc = cp.spawn('./target/release/apery', [], { cwd: '/usr/local/apery_rust/' })
-    // const proc = cp.spawn('./apery', [], { cwd: '/usr/local/apery/bin/' })
-    const proc = cp.spawn('./YaneuraOu-by-gcc', [], { cwd: '/usr/local/YaneuraOu-6.0.0/bin/' })
+    // コンテナから取り出された実行ファイルがEFSに置かれており、lambdaにマウントされている前提。
+    const proc = cp.spawn('./YaneuraOu-by-gcc', [], { cwd: '/mnt/bin/' });
     proc.stdin.write('setoption name USI_Ponder value false\n');
     proc.stdin.write(`setoption name USI_Hash value ${usiHash}\n`);
     proc.stdin.write('isready\n');
